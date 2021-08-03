@@ -8,19 +8,20 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7731740932666262972}
+  - component: {fileID: 7669950218374637510}
   - component: {fileID: 7731740932666262973}
-  - component: {fileID: -7241355005573375245}
+  - component: {fileID: 886119151705206823}
   - component: {fileID: 7731740932666262850}
+  - component: {fileID: 1474607698342836774}
   m_Layer: 0
-  m_Name: GroundPart
+  m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7731740932666262972
-Transform:
+--- !u!224 &7669950218374637510
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -33,6 +34,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.049, y: 0.055}
+  m_SizeDelta: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &7731740932666262973
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -74,8 +80,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.16353686, g: 0.18585522, b: 0.7075472, a: 1}
+  m_Sprite: {fileID: 21300000, guid: f0ae2fafeb5555348b16f630dcd3e131, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -85,7 +91,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-7241355005573375245
+--- !u!114 &886119151705206823
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,8 +103,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c78d42a0843edcc478ceba588ee33b19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _level: 0
-  _chance: 1000
+  _level: 1
+  _chance: 3
 --- !u!61 &7731740932666262850
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -116,7 +122,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.9325, y: 0.9925}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -125,3 +131,11 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!222 &1474607698342836774
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7731740932666262851}
+  m_CullTransparentMesh: 1

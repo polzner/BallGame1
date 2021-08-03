@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
@@ -9,13 +10,8 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private float _cellSize = 1;
     [SerializeField] private float _radius;
 
-    private List<Vector2Int> _collisionMatrix = new List<Vector2Int>();
-    private enum GridLevel
-    {
-        Ground = 0,
-        Trap = 1
-    }
-
+    private List<Vector2Int> _collisionMatrix = new List<Vector2Int>();   
+    
     private void Update()
     {
         int cellQuantity = (int)(_radius / _cellSize);
@@ -24,24 +20,27 @@ public class LevelGenerator : MonoBehaviour
         {
             _pool.DeselectOutOfScreen();
             TryPlacePart(WorldToGrid(_playerTransform.position) + new Vector2Int(x, 0), GridLevel.Ground);
+            TryPlacePart(WorldToGrid(_playerTransform.position) + new Vector2Int(x, 0), GridLevel.OnGround);
         }
     }
 
     private void TryPlacePart(Vector2Int gridPosition, GridLevel level)
     {
+        gridPosition.y = (int)level;
+
         if (_collisionMatrix.Contains(gridPosition))
             return;
 
-        if (_pool.TryGetPart(out GameObject part))
+        _collisionMatrix.Add(gridPosition);
+
+        if (_pool.TryGetRandomObject(level, out GridObject part))
         {
-            _collisionMatrix.Add(gridPosition);
-            gridPosition.y = (int)level;
             part.transform.position = GridToWorld(gridPosition);
             part.gameObject.SetActive(true);
         }
     }
 
-    public Vector2 GridToWorld(Vector2Int position)
+    private Vector2 GridToWorld(Vector2Int position)
     {
         Vector2 worldPosition = Vector2.zero;
         worldPosition.x = position.x * _cellSize;
@@ -49,7 +48,7 @@ public class LevelGenerator : MonoBehaviour
         return worldPosition;
     }
 
-    public Vector2Int WorldToGrid(Vector2 position)
+    private Vector2Int WorldToGrid(Vector2 position)
     {
         Vector2Int gridPosition = Vector2Int.zero;
         gridPosition.x = (int)(position.x / _cellSize);

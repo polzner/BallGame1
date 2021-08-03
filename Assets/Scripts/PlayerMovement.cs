@@ -18,8 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //_rigidBody.velocity = new Vector2(_maxSped * _normalizedSpeedByDistance.Evaluate(transform.position.x), _rigidBody.velocity.y);
-        _rigidBody.velocity = new Vector2(2, _rigidBody.velocity.y);
+        _rigidBody.velocity = new Vector2(_maxSpeed * _normalizedSpeedByDistance.Evaluate(transform.position.x), _rigidBody.velocity.y);
     }
 
     private void OnCollisionStay2D(Collision2D collision)

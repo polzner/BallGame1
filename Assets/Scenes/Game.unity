@@ -331,7 +331,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1320614048}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.57, y: 4.35, z: 0}
+  m_LocalPosition: {x: -0.03, y: 5.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -387,10 +387,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxSpeed: 10
-  _jumpForce: 250
+  _jumpForce: 300
   _normalizedSpeedByDistance:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.3
+      inSlope: 0.0046666665
+      outSlope: 0.0046666665
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 150
+      value: 1
+      inSlope: 0.0046666665
+      outSlope: 0.0046666665
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -427,7 +445,9 @@ MonoBehaviour:
   _camera: {fileID: 985965077}
   _container: {fileID: 2137127173}
   _groundPart: {fileID: 7731740932666262851, guid: 3ce11aef66a4ef34bbda6360870632ba, type: 3}
-  _partQuantity: 40
+  _spike: {fileID: 7731740932666262851, guid: d346e631bf4923145bce14b5d843824c, type: 3}
+  _groundPartQuantity: 30
+  _spikeQuantity: 30
 --- !u!114 &2137127172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -443,7 +463,7 @@ MonoBehaviour:
   _playerTransform: {fileID: 1320614050}
   _pool: {fileID: 2137127171}
   _cellSize: 1
-  _radius: 14
+  _radius: 15
 --- !u!4 &2137127173
 Transform:
   m_ObjectHideFlags: 0

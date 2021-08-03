@@ -8,32 +8,57 @@ public class ObjectsPool : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _container;
     [SerializeField] private GameObject _groundPart;
-    [SerializeField] private int _partQuantity;
+    [SerializeField] private GameObject _spike;
+    [SerializeField] private int _groundPartQuantity;
+    [SerializeField] private int _spikeQuantity;
 
-    private List<GameObject> _partsPool = new List<GameObject>();
+    private List<GameObject> _objectsPool = new List<GameObject>();
 
     private void Start()
     {
-        for (int i = 0; i < _partQuantity; i++)
+        FillContainer(_groundPart, _groundPartQuantity);
+        FillContainer(_spike, _spikeQuantity);
+    }
+
+    private void FillContainer(GameObject prefab, int quantity)
+    {
+        for (int i = 0; i < quantity; i++)
         {
-            GameObject part = Instantiate(_groundPart, _container);
-            part.SetActive(false);
-            _partsPool.Add(part);
+            GameObject clone = Instantiate(prefab, _container);
+            clone.SetActive(false);
+            _objectsPool.Add(clone);
         }
     }
 
-    public bool TryGetPart(out GameObject part)
+    public bool TryGetRandomObject(GridLevel level, out GridObject prefab)
     {
-        part = null;
-        part = _partsPool.FirstOrDefault(part => !part.activeSelf);
-        return part != null;
+        prefab = null;
+        List<GridObject> possiblePrefabs = new List<GridObject>();
+        foreach (var gridObject in _objectsPool)
+        {
+            if(gridObject.GetComponent<GridObject>().Level == level && !gridObject.activeSelf)
+            {
+                possiblePrefabs.Add(gridObject.GetComponent<GridObject>());
+            }
+        }
+
+        foreach (var possiblePrefab in possiblePrefabs)
+        {
+            if (possiblePrefab.Chance > Random.Range(0, 1000))
+            {
+                prefab = possiblePrefab;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void DeselectOutOfScreen()
     {
         Vector3 pointOutOfScreen = _camera.ViewportToWorldPoint(new Vector2(0, 0));
 
-        foreach (var item in _partsPool)
+        foreach (var item in _objectsPool)
         {
             if (item.gameObject.activeSelf && item.transform.position.x < pointOutOfScreen.x - 1)
             {
