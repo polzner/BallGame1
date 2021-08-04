@@ -2,14 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float _maxSpeed = 10;
-    [SerializeField] private float _jumpForce = 100;
-    [SerializeField] private AnimationCurve _normalizedSpeedByDistance;
+    [SerializeField] private AnimationCurve _jumpTragectory;
+    [SerializeField] private float _moveSpeed = 10;
+    [SerializeField] private float _jumpRange;
+    [SerializeField] private float _jumpHeigh;
 
-    private bool _grounded;
+    private Vector2 _normal = Vector2.zero;
     private Rigidbody2D _rigidBody;
+    private float _currentValue;
+    private State _state;
+
+    private enum State
+    {
+        Moving,
+        Jumping
+    }
 
     private void Start()
     {
@@ -18,25 +28,45 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rigidBody.velocity = new Vector2(_maxSpeed * _normalizedSpeedByDistance.Evaluate(transform.position.x), _rigidBody.velocity.y);
+        if (_state == State.Moving && _normal != Vector2.zero)
+        {
+            Vector2 correctNormal = new Vector2(_normal.y, _normal.x);
+            var offset = Vector2.right * Vector3.Dot(Vector3.right, correctNormal) * _moveSpeed * Time.deltaTime;
+            _rigidBody.MovePosition(new Vector2(transform.position.x, transform.position.y) + offset);
+        }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        _grounded = true;
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        _grounded = false;
+        _normal = collision.contacts[0].normal;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && _grounded)
+        if (Input.GetKeyDown(KeyCode.Space) && _state == State.Moving)
         {
-            _rigidBody.AddForce(Vector2.up * _jumpForce);
-            _grounded = false;
+            _state = State.Jumping;
+            StartCoroutine(Jump());
+            StopCoroutine(Jump());
         }
+    }
+
+    private IEnumerator Jump()
+    {
+        var delay = new WaitForFixedUpdate();
+        float offset = 0;
+        Vector3 startPosition = transform.position;
+        float lastCurveKeyTime = _jumpTragectory.keys[_jumpTragectory.keys.Length - 1].time;
+
+        while (_currentValue <= lastCurveKeyTime)
+        {
+            offset += _jumpRange * Time.deltaTime;
+            _currentValue += Time.deltaTime;
+            _rigidBody.MovePosition(startPosition + new Vector3(offset, _jumpTragectory.Evaluate(_currentValue) * _jumpHeigh, 0));
+            yield return delay;
+        }
+
+        _currentValue = 0;
+        _state = State.Moving;
     }
 }
