@@ -47,7 +47,6 @@ public class PlayerMovement : MonoBehaviour
         {
             _state = State.Jumping;
             StartCoroutine(Jump());
-            StopCoroutine(Jump());
         }
     }
 
