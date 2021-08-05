@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 7669950218374637510}
   - component: {fileID: 7731740932666262973}
   - component: {fileID: 886119151705206823}
-  - component: {fileID: 7731740932666262850}
   - component: {fileID: 7253714353394092814}
+  - component: {fileID: 7731740932666262850}
   - component: {fileID: 1474607698342836774}
   m_Layer: 6
   m_Name: Spike
@@ -106,6 +106,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _level: 1
   _chance: 3
+--- !u!114 &7253714353394092814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7731740932666262851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c33dca91ebc6a3340b9f378428f4b892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damage: 1
 --- !u!61 &7731740932666262850
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -132,19 +145,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8057177, y: 0.8776741}
   m_EdgeRadius: 0
---- !u!114 &7253714353394092814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7731740932666262851}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c33dca91ebc6a3340b9f378428f4b892, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _damage: 1
 --- !u!222 &1474607698342836774
 CanvasRenderer:
   m_ObjectHideFlags: 0

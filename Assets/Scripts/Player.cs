@@ -7,7 +7,10 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private int _health = 1;
 
+    private int _coinQuantity;
+
     public event UnityAction Dead;
+    public event UnityAction<int> CoinQuantityChanged;
     public event UnityAction<int> HealthChanged;
 
     private void Start()
@@ -23,5 +26,11 @@ public class Player : MonoBehaviour
             Dead?.Invoke();
 
         HealthChanged?.Invoke(_health);
+    }
+
+    public void AddCoin() 
+    {
+        _coinQuantity++;
+        CoinQuantityChanged?.Invoke(_coinQuantity);
     }
 }

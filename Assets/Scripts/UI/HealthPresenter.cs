@@ -10,15 +10,15 @@ public class HealthPresenter : MonoBehaviour
 
     private void OnEnable()
     {
-        _player.HealthChanged += DrawHealth;
+        _player.HealthChanged += DisplayHealth;
     }
 
     private void OnDisable()
     {
-        _player.HealthChanged -= DrawHealth;
+        _player.HealthChanged -= DisplayHealth;
     }
 
-    private void DrawHealth(int health)
+    private void DisplayHealth(int health)
     {
         _healthText.text = health.ToString();
     }
