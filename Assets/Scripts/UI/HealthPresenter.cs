@@ -10,15 +10,15 @@ public class HealthPresenter : MonoBehaviour
 
     private void OnEnable()
     {
-        _player.HealthChanged += DisplayHealth;
+        _player.HealthChanged += OnHealthChanged;
     }
 
     private void OnDisable()
     {
-        _player.HealthChanged -= DisplayHealth;
+        _player.HealthChanged -= OnHealthChanged;
     }
 
-    private void DisplayHealth(int health)
+    private void OnHealthChanged(int health)
     {
         _healthText.text = health.ToString();
     }

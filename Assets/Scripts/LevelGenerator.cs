@@ -3,61 +3,68 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class LevelGenerator : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _playerTransform;
+    [SerializeField] private float _timeToCleanCollisionMatrixList;
     [SerializeField] private ObjectsPool _pool;
     [SerializeField] private float _cellSize = 1;
     [SerializeField] private float _radius;
     [SerializeField] private int _minCoinInLine;
-    [SerializeField] private int _maxCoinInLine;
+    [SerializeField] private int _maxCoinInLine;    
 
-    private List<Vector2Int> _collisionMatrix = new List<Vector2Int>();   
+    private List<Vector2Int> _collisionMatrix = new List<Vector2Int>();
+    private float _timestamp;
     
     private void Update()
     {
-        int cellQuantity = (int)(_radius / _cellSize);
+        CreateParts(_playerTransform.position, _radius);
+
+        if(Time.time - _timestamp >= _timeToCleanCollisionMatrixList)
+        {
+            _timestamp = Time.time;
+            CleanCollisionMatrix();
+        }
+    }
+
+    private void CreateParts(Vector3 center, float radius)
+    {
+        int cellQuantity = (int)(radius / _cellSize);
 
         for (int x = -cellQuantity; x < cellQuantity; x++)
         {
+            var gridPosition = WorldToGrid(center) + new Vector2Int(x, 0);
             _pool.DeselectOutOfScreen();
-            TryPlacePart(WorldToGrid(_playerTransform.position) + new Vector2Int(x, 0), GridLevel.Ground, 
-                (gridObject) => gridObject.TryGetComponent<Ground>(out Ground ground));
+            TryPlacePart(WorldToGrid(center) + new Vector2Int(x, 0), GridLevel.Ground, GridObjectType.Ground);
 
             if (x >= 0 && x % 2 == 0)
             {
-                TryPlacePart(WorldToGrid(_playerTransform.position) + new Vector2Int(x, 0), GridLevel.OnGround,
-                    (gridObject) => gridObject.TryGetComponent<Spike>(out Spike spike));
+                TryPlacePart(WorldToGrid(center) + new Vector2Int(x, 0), GridLevel.OnGround, GridObjectType.Spike);
             }
 
-            if(x >= 0)
-            {            
-                TryPlacePartInLine(WorldToGrid(_playerTransform.position) + new Vector2Int(x, 0), GridLevel.OnGround, Random.Range(_minCoinInLine, _maxCoinInLine),
-                    (gridObject) => gridObject.TryGetComponent<Coin>(out Coin coin));
+            if (x >= 0)
+            {
+                TryPlacePartInLine(WorldToGrid(center) + new Vector2Int(x, 0),
+                    GridLevel.OnGround, UnityEngine.Random.Range(_minCoinInLine, _maxCoinInLine), GridObjectType.Coin);
             }
-
-            var gridPosition = WorldToGrid(_playerTransform.position) + new Vector2Int(x, 0);
 
             if (!_collisionMatrix.Contains(gridPosition))
             {
                 _collisionMatrix.Add(gridPosition);
             }
         }
-
-        CleanCollisionMatrix();
     }
 
-    private void TryPlacePart(Vector2Int gridPosition, GridLevel level, Func<GameObject, bool> condition)
+    private void TryPlacePart(Vector2Int gridPosition, GridLevel level, GridObjectType type)
     {
         gridPosition.y = (int)level;
 
         if (_collisionMatrix.Contains(gridPosition))
             return;
 
-        if (_pool.TryGetRandomObject(level, out GridObject part, condition))
+        if (_pool.TryGetObjectWithRandomChance(out GridObject part, type))
         {
             _collisionMatrix.Add(gridPosition);
             part.transform.position = GridToWorld(gridPosition);
@@ -65,14 +72,14 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private void TryPlacePartInLine(Vector2Int gridPosition, GridLevel level, int objectsInLineQuantity, Func<GameObject, bool> condition)
+    private void TryPlacePartInLine(Vector2Int gridPosition, GridLevel level, int objectsInLineQuantity, GridObjectType type)
     {
         gridPosition.y = (int)level;
 
         if (_collisionMatrix.Contains(gridPosition))
             return;
 
-        if (_pool.TryGetRandomObject(level, out GridObject part, condition))
+        if (_pool.TryGetObjectWithRandomChance(out GridObject part, type))
         {
             for (int i = 0; i < objectsInLineQuantity; i++)
             {
@@ -80,7 +87,7 @@ public class LevelGenerator : MonoBehaviour
 
                 if (!_collisionMatrix.Contains(gridPosition))
                 {
-                    if (_pool.TryGetObject(level, out GridObject gridObject, condition))
+                    if (_pool.TryGetObject(out GridObject gridObject, type))
                     {
                         _collisionMatrix.Add(gridPosition);
                         gridObject.transform.position = GridToWorld(gridPosition);

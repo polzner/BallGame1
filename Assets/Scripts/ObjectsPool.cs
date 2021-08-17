@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using Random = UnityEngine.Random;
 
 public class ObjectsPool : MonoBehaviour
 {
@@ -16,59 +15,92 @@ public class ObjectsPool : MonoBehaviour
     [SerializeField] private int _spikeQuantity;
     [SerializeField] private int _coinQuantity;
 
-    private List<GameObject> _objectsPool = new List<GameObject>();
+    private List<GameObject> _groundPool = new List<GameObject>();
+    private List<GameObject> _spikePool = new List<GameObject>();
+    private List<GameObject> _coinPool = new List<GameObject>();    
 
     private void Start()
     {
-        FillContainer(_groundPart, _groundPartQuantity);
-        FillContainer(_spike, _spikeQuantity);
-        FillContainer(_coin, _coinQuantity);
+        FillContainer(_groundPool, _groundPart, _groundPartQuantity);
+        FillContainer(_spikePool, _spike, _spikeQuantity);
+        FillContainer(_coinPool, _coin, _coinQuantity);
     }
 
-    private void FillContainer(GameObject prefab, int quantity)
+    private void FillContainer(List<GameObject> pool, GameObject prefab, int quantity)
     {
         for (int i = 0; i < quantity; i++)
         {
             GameObject clone = Instantiate(prefab, _container);
             clone.SetActive(false);
-            _objectsPool.Add(clone);
+            pool.Add(clone);
         }
     }
 
-    public bool TryGetRandomObject(GridLevel level, out GridObject prefab, Func<GameObject, bool> condition)
+    public bool TryGetObjectWithRandomChance(out GridObject part, GridObjectType gridObjectType)
     {
-        prefab = null;
-        List<GridObject> possiblePrefabs = new List<GridObject>();
+        part = null;
 
-        foreach (var gridObject in _objectsPool)
+        switch (gridObjectType)
         {
-            if(gridObject.GetComponent<GridObject>().Level == level && !gridObject.activeSelf && condition(gridObject))
-            {
-                possiblePrefabs.Add(gridObject.GetComponent<GridObject>());
-            }
+            case GridObjectType.Ground:                
+                return TryGetObjectInPoolWithRandomChance(out part, _groundPool);
+            case GridObjectType.Spike:
+                return TryGetObjectInPoolWithRandomChance(out part, _spikePool);
+            case GridObjectType.Coin:
+                return TryGetObjectInPoolWithRandomChance(out part, _coinPool);
         }
 
-        foreach (var possiblePrefab in possiblePrefabs)
+        return false;
+    }
+
+    public bool TryGetObject(out GridObject part, GridObjectType gridObjectType)
+    {
+        part = null;
+
+        switch (gridObjectType)
         {
-            if (possiblePrefab.Chance > Random.Range(0, 1000))
+            case GridObjectType.Ground:
+                return TryGetObjectInPool(out part, _groundPool);
+            case GridObjectType.Spike:
+                return TryGetObjectInPool(out part, _spikePool);
+            case GridObjectType.Coin:
+                return TryGetObjectInPool(out part, _coinPool);
+        }
+
+        return false;
+    }
+
+    private bool TryGetObjectInPoolWithRandomChance(out GridObject part, List<GameObject> pool)
+    {
+        part = null;
+
+        foreach (var item in pool)
+        {
+            if (!item.activeSelf)
             {
-                prefab = possiblePrefab;
-                return true;
+                GridObject gridObject = item.GetComponent<GridObject>();
+
+                if (gridObject.Chance > UnityEngine.Random.Range(0f, 100f))
+                {
+                    part = gridObject;
+                    return true;
+                }
             }
         }
 
         return false;
     }
 
-    public bool TryGetObject(GridLevel level, out GridObject prefab, Func<GameObject, bool> condition)
+    private bool TryGetObjectInPool(out GridObject part, List<GameObject> pool)
     {
-        prefab = null;
+        part = null;
 
-        foreach (var gridObject in _objectsPool)
+        foreach (var item in pool)
         {
-            if (gridObject.GetComponent<GridObject>().Level == level && !gridObject.activeSelf && condition(gridObject))
+            if (!item.activeSelf)
             {
-                prefab = gridObject.GetComponent<GridObject>();
+                GridObject gridObject = item.GetComponent<GridObject>();
+                part = gridObject;
                 return true;
             }
         }
@@ -80,7 +112,7 @@ public class ObjectsPool : MonoBehaviour
     {
         Vector3 pointOutOfScreen = _camera.ViewportToWorldPoint(new Vector2(0, 0));
 
-        foreach (var item in _objectsPool)
+        foreach (var item in _groundPool)
         {
             if (item.gameObject.activeSelf && item.transform.position.x < pointOutOfScreen.x - 1)
             {
@@ -88,5 +120,5 @@ public class ObjectsPool : MonoBehaviour
                 item.transform.position = _container.position;
             }
         }
-    }
+    }   
 }
