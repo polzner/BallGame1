@@ -85,14 +85,11 @@ public class LevelGenerator : MonoBehaviour
             {
                 gridPosition.x += (int)_cellSize;
 
-                if (!_collisionMatrix.Contains(gridPosition))
+                if (!_collisionMatrix.Contains(gridPosition) && _pool.TryGetObject(out GridObject gridObject, type))
                 {
-                    if (_pool.TryGetObject(out GridObject gridObject, type))
-                    {
-                        _collisionMatrix.Add(gridPosition);
-                        gridObject.transform.position = GridToWorld(gridPosition);
-                        gridObject.gameObject.SetActive(true);
-                    }
+                    _collisionMatrix.Add(gridPosition);
+                    gridObject.transform.position = GridToWorld(gridPosition);
+                    gridObject.gameObject.SetActive(true);
                 }
                 else
                 {
