@@ -176,6 +176,7 @@ GameObject:
   m_Component:
   - component: {fileID: 514230625}
   - component: {fileID: 514230626}
+  - component: {fileID: 514230627}
   m_Layer: 0
   m_Name: GroundPool
   m_TagString: Untagged
@@ -213,6 +214,20 @@ MonoBehaviour:
   _objectsQuantity: 30
   _container: {fileID: 514230625}
   _camera: {fileID: 985965077}
+--- !u!114 &514230627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514230624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75862603b3145904f85be120a1a52dba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pool: {fileID: 514230626}
+  _camera: {fileID: 985965077}
 --- !u!1 &659377278
 GameObject:
   m_ObjectHideFlags: 0
@@ -223,6 +238,7 @@ GameObject:
   m_Component:
   - component: {fileID: 659377279}
   - component: {fileID: 659377280}
+  - component: {fileID: 659377281}
   m_Layer: 0
   m_Name: CoinPool
   m_TagString: Untagged
@@ -259,6 +275,20 @@ MonoBehaviour:
   _gridObject: {fileID: 4569852699510612230, guid: 3a5ca46f817d45342b25e4fcac52d7b4, type: 3}
   _objectsQuantity: 15
   _container: {fileID: 659377279}
+  _camera: {fileID: 985965077}
+--- !u!114 &659377281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659377278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75862603b3145904f85be120a1a52dba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pool: {fileID: 659377280}
   _camera: {fileID: 985965077}
 --- !u!1 &696990128
 GameObject:
@@ -1031,6 +1061,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1285634818}
   - component: {fileID: 1285634819}
+  - component: {fileID: 1285634820}
   m_Layer: 0
   m_Name: SpikePool
   m_TagString: Untagged
@@ -1067,6 +1098,20 @@ MonoBehaviour:
   _gridObject: {fileID: 7731740932666262851, guid: d346e631bf4923145bce14b5d843824c, type: 3}
   _objectsQuantity: 15
   _container: {fileID: 1285634818}
+  _camera: {fileID: 985965077}
+--- !u!114 &1285634820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285634817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75862603b3145904f85be120a1a52dba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pool: {fileID: 1285634819}
   _camera: {fileID: 985965077}
 --- !u!1 &1285955179
 GameObject:
@@ -1260,6 +1305,8 @@ GameObject:
   - component: {fileID: 1320614051}
   - component: {fileID: 1320614052}
   - component: {fileID: 1320614053}
+  - component: {fileID: 1320614056}
+  - component: {fileID: 1320614055}
   - component: {fileID: 1320614054}
   m_Layer: 7
   m_Name: Player
@@ -1383,6 +1430,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfe94b50264561e4d9696d1ad8c0a10b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _move: {fileID: 1320614056}
+  _jump: {fileID: 1320614055}
+--- !u!114 &1320614054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320614048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89178f01d8c73784fa6f803a19026220, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 4
+--- !u!114 &1320614055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320614048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8bf1f59ea3b88418cf23dcd61c7b67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _jumpTragectory:
     serializedVersion: 2
     m_Curve:
@@ -1405,18 +1479,18 @@ MonoBehaviour:
       inWeight: 0.34922
       outWeight: 1
     - serializedVersion: 3
-      time: 0.21889037
+      time: 0.3
       value: 1
-      inSlope: 0.05806416
+      inSlope: 0.027305743
       outSlope: -2.4489896
       tangentMode: 5
       weightedMode: 0
       inWeight: 0.10626316
       outWeight: 0.23919006
     - serializedVersion: 3
-      time: 0.4975586
+      time: 0.5
       value: 0
-      inSlope: -3.5884967
+      inSlope: -5.0000005
       outSlope: 0
       tangentMode: 5
       weightedMode: 0
@@ -1425,10 +1499,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _moveSpeed: 10
-  _jumpRange: 7
-  _jumpHeigh: 1.7
---- !u!114 &1320614054
+  _jumpRange: 9
+  _jumpHeigh: 1.4
+--- !u!114 &1320614056
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1437,10 +1510,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1320614048}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89178f01d8c73784fa6f803a19026220, type: 3}
+  m_Script: {fileID: 11500000, guid: b98fd9061bfc7fc4aba640353f8062c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 4
+  _moveSpeed: 10
 --- !u!1 &1460372310
 GameObject:
   m_ObjectHideFlags: 0
@@ -1948,8 +2021,6 @@ MonoBehaviour:
   _grid: {fileID: 2137127171}
   _cellSize: 1
   _radius: 15
-  _minCoinInLine: 2
-  _maxCoinInLine: 4
 --- !u!4 &2137127173
 Transform:
   m_ObjectHideFlags: 0

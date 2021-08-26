@@ -100,6 +100,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _level: 0
   _chance: 1000
+  _minObjectsInLine: 1
+  _maxObjectsInLine: 1
 --- !u!61 &7731740932666262850
 BoxCollider2D:
   m_ObjectHideFlags: 0

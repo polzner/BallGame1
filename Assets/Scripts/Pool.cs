@@ -12,14 +12,12 @@ public class Pool : MonoBehaviour
 
     private List<GameObject> _pool = new List<GameObject>();
 
+    public Transform Container => _container;
+    public IEnumerable Objects => _pool;
+
     private void Start()
     {
         FillContainer(_pool, _gridObject, _objectsQuantity);
-    }
-
-    private void Update()
-    {
-        DeselectOutOfScren();
     }
 
     private void FillContainer(List<GameObject> pool, GameObject prefab, int quantity)
@@ -45,19 +43,5 @@ public class Pool : MonoBehaviour
         }
 
         return gridObject != null;
-    }
-
-    public void DeselectOutOfScren()
-    {
-        Vector3 pointOutOfScreen = _camera.ViewportToWorldPoint(new Vector2(0, 0));
-
-        foreach (var item in _pool)
-        {
-            if (item.gameObject.activeSelf && item.transform.position.x < pointOutOfScreen.x - 1)
-            {
-                item.gameObject.SetActive(false);
-                item.transform.position = _container.position;
-            }
-        }
     }
 }

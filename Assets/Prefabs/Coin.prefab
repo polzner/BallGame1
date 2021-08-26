@@ -115,7 +115,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _level: 1
-  _chance: 1
+  _chance: 3
+  _minObjectsInLine: 0
+  _maxObjectsInLine: 4
 --- !u!114 &6859531650442588977
 MonoBehaviour:
   m_ObjectHideFlags: 0

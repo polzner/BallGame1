@@ -11,9 +11,7 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private PoolsContainer _pool;
     [SerializeField] private WorldGrid _grid;
     [SerializeField] private float _cellSize = 1;
-    [SerializeField] private float _radius;
-    [SerializeField] private int _minCoinInLine;
-    [SerializeField] private int _maxCoinInLine;    
+    [SerializeField] private float _radius;  
 
     private void Update()
     {
@@ -32,8 +30,7 @@ public class LevelGenerator : MonoBehaviour
             if (x >= 0)
             {
                 TryPlacePart(_grid.WorldToGrid(center, _cellSize) + new Vector2Int(x, 0), GridLevel.OnGround, GridObjectType.Spike);
-                TryPlacePartInLine(_grid.WorldToGrid(center, _cellSize) + new Vector2Int(x, 0),
-                    GridLevel.OnGround, UnityEngine.Random.Range(_minCoinInLine, _maxCoinInLine), GridObjectType.Coin);
+                TryPlacePart(_grid.WorldToGrid(center, _cellSize) + new Vector2Int(x, 0), GridLevel.OnGround, GridObjectType.Coin);
             }
 
             _grid.AddCollision(gridPosition);
@@ -47,34 +44,24 @@ public class LevelGenerator : MonoBehaviour
 
         gridPosition.y = (int)level;
 
-        if (_pool.TryGetObjectWithRandomChance(out GridObject part, type))
+        if (_pool.TryGetObjectWithRandomChance(out GridObject newGridObject, type))
         {
-            _grid.AddCollision(gridPosition);
-            part.transform.position = _grid.GridToWorld(gridPosition, _cellSize);
-            part.gameObject.SetActive(true);
-        }
-    }
+            int objectsInLineQuantity = UnityEngine.Random.Range(newGridObject.MinObjectsInLine, newGridObject.MaxObjectsInLine);
 
-    private void TryPlacePartInLine(Vector2Int gridPosition, GridLevel level, int objectsInLineQuantity, GridObjectType type)
-    {
-        if (_grid.Contains(gridPosition))
-            return;
-
-        gridPosition.y = (int)level;
-
-        for (int i = 0; i < objectsInLineQuantity; i++)
-        {
-            gridPosition.x += (int)_cellSize;
-
-            if (!_grid.Contains(gridPosition) && _pool.TryGetObjectWithRandomChance(out GridObject gridObject, type))
+            for (int i = 0; i < objectsInLineQuantity; i++)
             {
-                _grid.AddCollision(gridPosition);
-                gridObject.transform.position = _grid.GridToWorld(gridPosition, _cellSize);
-                gridObject.gameObject.SetActive(true);
-            }
-            else
-            {
-                return;
+                if (!_grid.Contains(gridPosition) && _pool.TryGetObjectWithRandomChance(out GridObject gridObject, type))
+                {
+                    _grid.AddCollision(gridPosition);
+                    gridObject.transform.position = _grid.GridToWorld(gridPosition, _cellSize);
+                    gridObject.gameObject.SetActive(true);
+                }
+                else
+                {
+                    return;
+                }
+
+                gridPosition.x += (int)_cellSize;
             }
         }
     }
